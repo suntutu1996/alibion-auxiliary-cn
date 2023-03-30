@@ -1,0 +1,21 @@
+Albion Data Project提供的API返回的字段含义如下：
+
+Timestamp：时间戳，表示数据更新的时间，单位为毫秒。
+ItemID：物品ID，表示物品的唯一标识符。
+ItemName：物品名称，表示物品的名称。
+CityName：城市名称，表示该物品在哪个城市出售。
+SellPriceMin：最低出售价格，表示该物品在该城市最低的出售价格。
+SellPriceMinDate：最低出售价格更新时间，表示最低出售价格的更新时间。
+SellPriceMax：最高出售价格，表示该物品在该城市最高的出售价格。
+SellPriceMaxDate：最高出售价格更新时间，表示最高出售价格的更新时间。
+BuyPriceMin：最低购买价格，表示该物品在该城市最低的购买价格。
+BuyPriceMinDate：最低购买价格更新时间，表示最低购买价格的更新时间。
+BuyPriceMax：最高购买价格，表示该物品在该城市最高的购买价格。
+BuyPriceMaxDate：最高购买价格更新时间，表示最高购买价格的更新时间。
+Demand：需求量，表示该物品在该城市的需求量。
+DemandDate：需求量更新时间，表示需求量的更新时间。
+QualityLevel：品质等级，表示该物品的品质等级。
+Tier：等级，表示该物品的等级。
+City：城市ID，表示该物品所在城市的ID。
+CityID：城市ID，表示该物品所在城市的ID。
+注意：字段的含义可能随着API版本的更新而有所变化，需要参考官方文档或API接口说明。
