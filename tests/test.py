@@ -12,7 +12,7 @@ config.read(config_path)
 # 获取配置参数
 api_url = config.get('dataConfig', 'api_url')
 
-url = api_url + "v2/stats/history/T5_BAG@1?time-scale=1"
+url = api_url + "v2/stats/history/ITEMS_T1_FARM_CARROT_SEED@1?time-scale=1"
 
 response = requests.get(url)
 
