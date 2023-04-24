@@ -1,20 +1,13 @@
-import mysql.connector
+from sqlalchemy import create_engine
+import pandas as pd
 
-config = {
-    'user': 'root',
-    'password': 'root',
-    'host': '127.0.0.1',
-    'database': 'tt',
-}
+# 假设你的数据库 URL 是这样的
+db_url = 'mysql+pymysql://root:root@localhost:3306/alibion_market'
 
-try:
-    cnx = mysql.connector.connect(**config)
-    print('Connected to MySQL database:', cnx.get_server_info())
-    cursor = cnx.cursor()
-    cursor.execute('SELECT DATABASE()')
-    db_name = cursor.fetchone()[0]
-    print('Connected to database:', db_name)
-    cursor.close()
-    cnx.close()
-except mysql.connector.Error as err:
-    print('Failed to connect to MySQL database:', err)
+# 创建引擎对象
+engine = create_engine(db_url)
+
+# 从数据库中读取表格数据
+df = pd.read_sql_query('SELECT * FROM market_data', con=engine)
+
+# ... 然后可以对 df 进行操作，例如过滤、排序、聚合等

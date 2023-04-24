@@ -17,7 +17,7 @@ try:
 except FileExistsError:
     pass
 
-engine = create_engine('mysql+pymysql://root:root@localhost:3306/tt')
+engine = create_engine('mysql+pymysql://root:root@localhost:3306/alibion_market')
 
 app = dash.Dash(__name__)
 
@@ -81,7 +81,7 @@ def refresh_tables(n_clicks):
                 'label': table,
                 'value': table
             }
-            for table in pd.read_sql_query('SHOW TABLES', con=engine)['Tables_in_tt']
+            for table in pd.read_sql_query('SHOW TABLES', con=engine)['Tables_in_alibion_market']
         ]
 
     return dash.no_update

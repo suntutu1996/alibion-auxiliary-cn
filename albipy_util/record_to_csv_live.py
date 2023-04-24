@@ -1,6 +1,18 @@
 from AlbiPy import sniffing_thread
 from AlbiPy import HEADERS
 from time import sleep
+import pymysql
+
+# 创建数据库连接
+conn = pymysql.connect(
+    host='localhost',
+    user='root',
+    password='root',
+    database='alibion_market'
+)
+
+# 获取游标
+cursor = conn.cursor()
 
 
 def orders_to_csv(orders, filename):
@@ -13,6 +25,36 @@ def orders_to_csv(orders, filename):
     # 写入解析后的数据到文件
     for order in orders:
         output_file.write(",".join(list(map(str, order.data))) + "\n")
+        print(order.data)
+        cursor.execute("""
+            INSERT IGNORE INTO `market_data`
+            (`Id`, `UnitPriceSilver`, `TotalPriceSilver`, `Amount`, `Tier`, `IsFinished`, `AuctionType`, `HasBuyerFetched`, `HasSellerFetched`, `SellerCharacterId`, `SellerName`, `BuyerCharacterId`, `BuyerName`, `ItemTypeId`, `ItemGroupTypeId`, `EnchantmentLevel`, `QualityLevel`, `Expires`, `ReferenceId`)
+            VALUES
+            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """, (
+            order.Id,
+            order.UnitPriceSilver,
+            order.TotalPriceSilver,
+            order.Amount,
+            order.Tier,
+            order.IsFinished,
+            order.AuctionType,
+            order.HasBuyerFetched,
+            order.HasSellerFetched,
+            order.SellerCharacterId,
+            order.SellerName,
+            order.BuyerCharacterId,
+            order.BuyerName,
+            order.ItemTypeId,
+            order.ItemGroupTypeId,
+            order.EnchantmentLevel,
+            order.QualityLevel,
+            order.Expires,
+            order.ReferenceId
+        ))
+
+        # 提交事务
+        conn.commit()
 
     # 关闭输出文件
     output_file.close()
@@ -33,15 +75,11 @@ try:
         sleep(3)
 
         print("获取记录的订单...")
-        try:
-            orders = thread.get_data()
-        except Exception as e:
-            print(f"在获取订单时发生异常: {str(e)}")
-            print("跳过此迭代并移动到下一个迭代...")
-            continue
+        orders = thread.get_data()
+
 
         print("将记录的订单写入", output_filename)
-        orders_to_csv(orders, output_filename)
+        orders_to_csv(orders.parsed, output_filename)
 except KeyboardInterrupt:
     pass
 
@@ -55,3 +93,8 @@ orders = thread.get_data()
 # 将所有未写入的订单写入 csv 文件
 print("将剩余订单写入", output_filename)
 orders_to_csv(orders, output_filename)
+
+# 关闭游标和数据库连接
+cursor.close()
+if conn.open:
+    conn.close()
